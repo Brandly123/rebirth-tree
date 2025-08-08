@@ -14,7 +14,7 @@ addLayer("r", {
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "custom",
     getNextAt(){
-      let costs = [5,250,3350,2500000,1e23,9.99e95,"eeeee9","1e1100","eeeee9"]
+      let costs = [5,100,25000,2500000,1e23,9.99e95,"eeeee9","1e1100","eeeee9"]
       if(hasAchievement("a",51)) costs[6] = "1e265";
       return new Decimal(costs[player[this.layer].points])
     },
@@ -38,15 +38,15 @@ addLayer("r", {
           return new Decimal(new Decimal(5).pow(x)).pow(x).mul(10)
         },
         effect(x) {
-          return x.pow(1.15).div(10).plus(1)
+          return x.pow(1.3).div(10).plus(1)
         },
-        display() { return "<h3>Minor Rebirth to Point Gain</h3><br>Cost: " + format(this.cost()) + " points<br>Effect: x" + format(this.effect()) + " point gain"},
+        display() { return "<h3>Permament Rebirth to Point Gain</h3><br>Cost: " + format(this.cost()) + " points<br>Effect: x" + format(this.effect()) + " point gain"},
         canAfford() { return player.points.gte(this.cost()) },
         buy() {
             player.points = player.points.sub(this.cost())
             setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
         },
-        unlocked(){return player.r.points.gte(6)}
+        unlocked(){return player.r.points.gte(5)}
       },
     },
     layerShown(){return true}
@@ -117,7 +117,7 @@ addLayer("a", {
       unlocked() {return player.a.points.gte(2)}
     },
     23: {
-      name: "How so many upgrades",
+      name: "Way too many upgrades",
       done() {return player.u.points.gte(9)},
       tooltip: "Have 9 upgrade points",
       onComplete() {player.a.points = player.a.points.plus(1)},
@@ -293,9 +293,9 @@ addLayer("p", {
       1: {
         requirementDescription: "3 prestige points",
         effect(){
-          let effect;
+          let effect = player.p.points.pow(0.4);
           if(hasUpgrade("u",12)) effect = player.p.points.pow(0.55)
-          effect = player.p.points.pow(0.4)
+            
           if(effect.gte(new Decimal("1e100"))) effect = effect.div(1e85).log(1.15).mul("1e100")
           if(hasMilestone("p",8)) effect = effect.mul(1e6)
           return effect.add(2)
@@ -323,18 +323,18 @@ addLayer("p", {
         unlocked() {return player.r.points.gte(2)}
       },
       3: { 
-        requirementDescription: "30 prestige points",
+        requirementDescription: "20 prestige points",
         effectDescription(){
           if(hasUpgrade("u",22)) return "Double prestige point and point gain"
           return "Double prestige point gain"
         },
-        done() { return player.p.points.gte(30) && player.r.points.gte(2) && !inChallenge("cp",12)},
+        done() { return player.p.points.gte(20) && player.r.points.gte(2) && !inChallenge("cp",12)},
         unlocked() {return player.r.points.gte(2)}
       },
       4: {
-        requirementDescription: "150 prestige points",
+        requirementDescription: "50 prestige points",
         effectDescription: "Unlock another challenge",
-        done() { return player.p.points.gte(150) && player.r.points.gte(2)},
+        done() { return player.p.points.gte(50) && player.r.points.gte(2)},
         unlocked() {return player.r.points.gte(2)}
       },
       5: {
@@ -386,15 +386,15 @@ addLayer("p", {
             return hasUpgrade("u",41) ? "Upgraded+" : "Upgraded"
           },
           challengeDescription(){
-             return "Raise point gain to ^0.15 & unlock an upgrade"
+             return "Raise point gain to ^0.25 & unlock an upgrade"
           },
           rewardDescription(){
             return hasUpgrade("u",41) ? "Unlock 3 upgrades" : "Unlock 2 upgrades"
           },
           goalDescription(){
-            return hasUpgrade("u",41) ? "Get 750 points" : "Get 30 points"
+            return hasUpgrade("u",41) ? "Get 750 points" : "Get 20 points"
           },
-          canComplete: function() {return player.points.gte(hasUpgrade("u",41) ? 750 : 30)},
+          canComplete: function() {return player.points.gte(hasUpgrade("u",41) ? 750 : 20)},
           onExit(){
             if(!hasChallenge("p",11)) player.p.upgrades.pop(11)
             if(player.points.gte(player.sp.ac12)) player.sp.ac12 = player.points
@@ -405,12 +405,12 @@ addLayer("p", {
           name(){
             return hasUpgrade("u",42) ? "Upgraded II+..." : "Upgraded II..."
           },
-          challengeDescription: "Raise point gain to ^0.45 and divide gain by 10 & unlock three upgrades",
+          challengeDescription: "Raise point gain to ^0.45 and divide gain by 5 & unlock three upgrades",
           rewardDescription(){
             return hasUpgrade("u",42) ? "Permamently unlock 3 upgrades" : "Permamently unlock an upgrade"
           },
-          goalDescription: "Upgrade 15",
-          canComplete: function() {return hasUpgrade("p",15)},
+          goalDescription: "All upgrades bought",
+          canComplete: function() {return player.p.upgrades.length >= 5},
           onExit(){
             player.p.upgrades.slice(0, 2)
             if(!hasChallenge("p",15)) player.p.upgrades.slice(0, 2).push(15)
@@ -488,14 +488,14 @@ addLayer("p", {
           return hasUpgrade("u",61) ? "Upgrade 15+" : "Upgrade 15"
         },
         description(){
-          return hasUpgrade("u",61) ? "x10 point gain" : "x4.5 point gain"
+          return hasUpgrade("u",61) ? "x10 point gain" : "x6 point gain"
         },
         effect(){
-          return hasUpgrade("u",61) ? new Decimal(10):  new Decimal(4.5)
+          return hasUpgrade("u",61) ? new Decimal(10):  new Decimal(6)
         },
         cost(){
           if(inChallenge("p",12) && hasUpgrade("u",42)) return new Decimal(450)
-          if(inChallenge("p",12)) return new Decimal(115)
+          if(inChallenge("p",12)) return new Decimal(100)
           return new Decimal(500)
         },
         currencyInternalName: "points",
@@ -731,7 +731,7 @@ addLayer("u", {
       },
       32: {
         fullDisplay(){
-          return "<h2>Milestone 7 Plus</h2><br>Milestone 7 formula is better<br>Costs 1 upgrade point"
+          return "<h2>Milestone 8 Plus</h2><br>Milestone 8 formula is better<br>Costs 1 upgrade point"
         },
         tooltip: "<em>u^1.75+1</em> => <em>u^2.5+1</em>",
         style:{"width":"280px","borderRadius":"25px"},

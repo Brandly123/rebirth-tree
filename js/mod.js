@@ -53,7 +53,6 @@ function getPointGen() {
   if(hasUpgrade("p",11)) gain = gain.mul(upgradeEffect("p",11))
   if(hasUpgrade("p",12)) gain = gain.mul(upgradeEffect("p",12))
   if(hasUpgrade("p",14)) gain = gain.mul(2)
-  gain = gain.mul(buyableEffect("r",11))
   if(hasUpgrade("p",15)) gain = gain.mul(upgradeEffect("p",15))
   if(hasMilestone("p",0) && hasUpgrade("u",11)) gain = gain.mul(layers.p.milestones[0].effect())
   if(hasUpgrade("p",21)) gain = gain.mul(upgradeEffect("p",21))
@@ -64,9 +63,9 @@ function getPointGen() {
   
   gain = gain.mul(buyableEffect("et",22))
   //layers.sp.milestones[1].effect()
-  if(inChallenge("p",11)) gain = gain.pow(0.15)
+  if(inChallenge("p",11)) gain = gain.pow(0.25)
   if(inChallenge("p",11) && options.difficulty) gain = gain.sub(1)
-  if(inChallenge("p",12)) gain = gain.pow(0.45).div(10)
+  if(inChallenge("p",12)) gain = gain.pow(0.45).div(5)
   if(inChallenge("p",21)) gain = gain.pow(0.25)
   if(inChallenge("sp",11)) gain = gain.pow(0.25).div(25000000)
   if(hasUpgrade("p",24)) gain = gain.pow(1.025)
@@ -102,6 +101,7 @@ function getPointGen() {
   }
   
   gain = gain.pow(calcSoftcap())
+  gain = gain.mul(buyableEffect("r",11))
   
 	return gain
 }
