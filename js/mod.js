@@ -13,13 +13,13 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.3d",
-	name: "Fixes",
+	num: "1.3f",
+	name: "(more) Fixes",
 }
 
 let changelog = ``
 
-let winText = `Congratulations! You have reached the endgame for this mod so far!<br>I should add some new content soon!`
+let winText = `Congratulations! You have reached the endgame!<br>This mod is basically abandoned though.. so no new updates ):`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
@@ -34,7 +34,7 @@ function canGenPoints(){
 	return true
 }
 // Display extra things at the top of the page
-var displayThings = ["Endgame: 5 rebirth points [1e30 points]"]
+var displayThings = ["Endgame: 25 achievements"]
 
 // Calculate points/sec!
 function getPointGen() {

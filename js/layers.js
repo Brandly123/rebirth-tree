@@ -224,7 +224,7 @@ addLayer("a", {
     51: {
       name: "Energy",
       done() {return player.et.points.gte(10)},
-      tooltip: "Get 10 energy tokens<br> Effect: ???",
+      tooltip: "Get 10 energy tokens<br>[reward] Unlock a new rebirth.",
       onComplete() {player.a.points = player.a.points.plus(1)},
     },
   },
