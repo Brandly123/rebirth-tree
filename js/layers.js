@@ -38,7 +38,7 @@ addLayer("r", {
           return new Decimal(new Decimal(5).pow(x)).pow(x).mul(10)
         },
         effect(x) {
-          return x.pow(1.3).div(10).plus(1)
+          return x.pow(new Decimal(1.5).add(x.div(10))).div(5).plus(1)
         },
         display() { return "<h3>Permament Rebirth to Point Gain</h3><br>Cost: " + format(this.cost()) + " points<br>Effect: x" + format(this.effect()) + " point gain"},
         canAfford() { return player.points.gte(this.cost()) },
@@ -364,11 +364,12 @@ addLayer("p", {
       7: {
         requirementDescription: "1e9 prestige points",
         effect(){
+          if(player.u.points.lte(0)) return new Decimal(1)
           if(hasUpgrade("u",72)) return player.u.points.add(1).pow(2.5).add(1)
           return player.u.points.pow(1.75).add(1)
         },
         effectDescription(){
-          return "Upgrades points multiply point gain. Currently: x" + this.effect() + " point gain"
+          return "Upgrades points multiply point gain. Currently: x" + format(this.effect()) + " point gain"
         },
         done() { return player.p.points.gte(1e9) && player.r.points.gte(4) && !inChallenge("cp",12)},
         unlocked() {return player.r.points.gte(4)}
@@ -633,9 +634,10 @@ addLayer("u", {
       return player.p.points.gte(this.getNextAt()) && !inChallenge("cp",11)
     },
     prestigeButtonText(){
-      if(inChallenge("cp",11)) return "You are unable to get Upgrade points [cp01]"
+      if(inChallenge("cp",11)) return `You are unable to get Upgrade points [cp0${(player.cp.activeChallenge-6)/5}]`
        return "+1 Upgrade points<br>cost: " + format(this.getNextAt()) + " prestige points"
     },
+
     row: 1, // Row the layer is in on the tree (0 is the first row)
     branches: ["p"],
     hotkeys: [
