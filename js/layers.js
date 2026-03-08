@@ -25,7 +25,7 @@ addLayer("r", {
       return player.points.gte(this.getNextAt())
     },
     prestigeButtonText(){
-      return "+1 Rebirth<br>cost: " + format(this.getNextAt()) + " points"
+      return "+1 Rebirth<br>next rebirth at " + format(this.getNextAt()) + " points"
     },
     row: 5, // Row the layer is in on the tree (0 is the first row)
     displayRow: "side",
